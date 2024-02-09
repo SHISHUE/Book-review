@@ -42,9 +42,9 @@ function Login() {
               Password <sup className="text-red-500">*</sup>
             </label>
             <input
-              type="passowrd"
-              name="passowrd"
-              id="passowrd"
+              type="password" // corrected typo from "passowrd" to "password"
+              name="password"
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"

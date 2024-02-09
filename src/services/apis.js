@@ -1,5 +1,5 @@
 
-const BASE_URL = "http://localhost:4000/api/v1"
+const BASE_URL = "https://book-review-ot6z.onrender.com/api/v1"
 
 
 

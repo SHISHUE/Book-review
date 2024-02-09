@@ -13,23 +13,33 @@ import "swiper/css/pagination";
 
 import { Pagination } from "swiper/modules";
 
+interface Book {
+  // Define the type of book object
+  volumeInfo: {
+    title: string;
+    authors: string[];
+    // Add any other properties you use from the book object
+  };
+  // Add other properties if necessary
+}
+
 function Home() {
-  const [books, setBooks] = useState([]);
-  const [javabooks, setJavaBooks] = useState([]);
-  const { inputValue } = useSelector((state) => state.input);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [javabooks, setJavaBooks] = useState<Book[]>([]);
+  const { inputValue } = useSelector((state: { input: { inputValue: string } }) => state.input);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getBooks();
+    if (inputValue) {
+      getBooks();
+    }
     getJavaBooks();
   }, [inputValue]);
 
   const getBooks = async () => {
     try {
-      const response = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=${inputValue}:keyes&key=AIzaSyCLXhh9IMFimbQLUEYXQPUBTtc5zz4uzaU`
-      );
-      console.log(response?.data?.items);
-      setBooks(response?.data?.items);
+      const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${inputValue}:keyes&key=AIzaSyCLXhh9IMFimbQLUEYXQPUBTtc5zz4uzaU`);
+      const data = response.data.items as Book[]; // Assert the type of data
+      setBooks(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -39,11 +49,9 @@ function Home() {
 
   const getJavaBooks = async () => {
     try {
-      const response = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=java&maxResults=10&key=AIzaSyCLXhh9IMFimbQLUEYXQPUBTtc5zz4uzaU`
-      );
-      console.log(response?.data?.items);
-      setJavaBooks(response?.data?.items);
+      const response = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=java&maxResults=10&key=AIzaSyCLXhh9IMFimbQLUEYXQPUBTtc5zz4uzaU`);
+      const data = response.data.items as Book[]; // Assert the type of data
+      setJavaBooks(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -75,7 +83,6 @@ function Home() {
         >
           {books.map((book, index) => (
             <SwiperSlide key={index}>
-              {" "}
               <Cards book={book} />
             </SwiperSlide>
           ))}
@@ -97,7 +104,6 @@ function Home() {
         >
           {javabooks.map((book, index) => (
             <SwiperSlide key={index}>
-              {" "}
               <Cards book={book} />
             </SwiperSlide>
           ))}
